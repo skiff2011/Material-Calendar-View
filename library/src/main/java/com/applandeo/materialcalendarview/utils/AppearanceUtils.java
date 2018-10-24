@@ -90,4 +90,8 @@ public final class AppearanceUtils {
 
         ((ImageButton) view.findViewById(R.id.forwardButton)).setImageDrawable(drawable);
     }
+
+    public static void setHeaderVisibility(View view, boolean visibility) {
+        view.findViewById(R.id.calendarHeader).setVisibility(visibility ? View.VISIBLE : View.GONE);
+    }
 }

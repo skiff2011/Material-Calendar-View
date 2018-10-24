@@ -17,6 +17,7 @@
         <attr name="datePicker" format="boolean" />
         <attr name="eventsEnabled" format="boolean" />
         <attr name="type" />
+        <attr name="headerVisible" format="boolean"/>
     </declare-styleable>
 
     <attr name="type" format="enum">

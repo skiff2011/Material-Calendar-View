@@ -41,6 +41,8 @@ public class CalendarProperties {
 
     private boolean mEventsEnabled;
 
+    private boolean mHeaderVisible = true;
+
     private Drawable mPreviousButtonSrc, mForwardButtonSrc;
 
     private Calendar mFirstPageCalendarDate = DateUtils.getCalendar();
@@ -348,5 +350,13 @@ public class CalendarProperties {
 
     public void setAnotherMonthsDaysLabelsColor(int anotherMonthsDaysLabelsColor) {
         mAnotherMonthsDaysLabelsColor = anotherMonthsDaysLabelsColor;
+    }
+
+    public boolean isHeaderVisible() {
+        return mHeaderVisible;
+    }
+
+    public void setHeaderVisible(boolean mHeaderVisible) {
+        this.mHeaderVisible = mHeaderVisible;
     }
 }

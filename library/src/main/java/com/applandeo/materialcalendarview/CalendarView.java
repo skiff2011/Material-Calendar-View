@@ -171,6 +171,9 @@ public class CalendarView extends LinearLayout {
 
         Drawable forwardButtonSrc = typedArray.getDrawable(R.styleable.CalendarView_forwardButtonSrc);
         mCalendarProperties.setForwardButtonSrc(forwardButtonSrc);
+
+        boolean headerVisible = typedArray.getBoolean(R.styleable.CalendarView_headerVisible, true);
+        mCalendarProperties.setHeaderVisible(headerVisible);
     }
 
     private void initAttributes() {
@@ -188,6 +191,8 @@ public class CalendarView extends LinearLayout {
         AppearanceUtils.setPreviousButtonImage(getRootView(), mCalendarProperties.getPreviousButtonSrc());
 
         AppearanceUtils.setForwardButtonImage(getRootView(), mCalendarProperties.getForwardButtonSrc());
+
+        AppearanceUtils.setHeaderVisibility(getRootView(), mCalendarProperties.isHeaderVisible());
 
         // Sets layout for date picker or normal calendar
         setCalendarRowLayout();

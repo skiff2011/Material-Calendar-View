@@ -124,6 +124,9 @@ public class CalendarPageAdapter extends PagerAdapter {
 
         // Count when month is beginning
         int firstDayOfWeek = calendar.getFirstDayOfWeek();
+
+        int totalMonthDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
         int monthBeginningCell = (dayOfWeek < firstDayOfWeek ? 7 : 0) + dayOfWeek - firstDayOfWeek;
 
         // Subtract a number of beginning days, it will let to load a part of a previous month
@@ -133,7 +136,12 @@ public class CalendarPageAdapter extends PagerAdapter {
         Get all days of one page (42 is a number of all possible cells in one page
         (a part of previous month, current month and a part of next month))
          */
-        while (days.size() < 42) {
+        int requiredNextMonthDays = 7 - (monthBeginningCell + totalMonthDays) % 7;
+        if (requiredNextMonthDays == 7) {
+            requiredNextMonthDays = 0;
+        }
+        int reqiredDays = requiredNextMonthDays + totalMonthDays + monthBeginningCell;
+        while (days.size() < reqiredDays) {
             days.add(calendar.getTime());
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
