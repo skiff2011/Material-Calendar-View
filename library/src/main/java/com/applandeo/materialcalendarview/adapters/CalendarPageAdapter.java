@@ -5,13 +5,11 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.applandeo.materialcalendarview.R;
 import com.applandeo.materialcalendarview.extensions.CalendarGridView;
 import com.applandeo.materialcalendarview.listeners.DayRowClickListener;
 import com.applandeo.materialcalendarview.utils.CalendarProperties;
 import com.applandeo.materialcalendarview.utils.SelectedDay;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -124,9 +122,6 @@ public class CalendarPageAdapter extends PagerAdapter {
 
         // Count when month is beginning
         int firstDayOfWeek = calendar.getFirstDayOfWeek();
-
-        int totalMonthDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
         int monthBeginningCell = (dayOfWeek < firstDayOfWeek ? 7 : 0) + dayOfWeek - firstDayOfWeek;
 
         // Subtract a number of beginning days, it will let to load a part of a previous month
@@ -136,12 +131,7 @@ public class CalendarPageAdapter extends PagerAdapter {
         Get all days of one page (42 is a number of all possible cells in one page
         (a part of previous month, current month and a part of next month))
          */
-        int requiredNextMonthDays = 7 - (monthBeginningCell + totalMonthDays) % 7;
-        if (requiredNextMonthDays == 7) {
-            requiredNextMonthDays = 0;
-        }
-        int reqiredDays = requiredNextMonthDays + totalMonthDays + monthBeginningCell;
-        while (days.size() < reqiredDays) {
+      while (days.size() < 42) {
             days.add(calendar.getTime());
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
