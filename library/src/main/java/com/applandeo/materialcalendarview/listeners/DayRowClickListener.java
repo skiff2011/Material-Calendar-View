@@ -3,7 +3,6 @@ package com.applandeo.materialcalendarview.listeners;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
-
 import com.annimon.stream.Stream;
 import com.applandeo.materialcalendarview.CalendarUtils;
 import com.applandeo.materialcalendarview.CalendarView;
@@ -14,7 +13,6 @@ import com.applandeo.materialcalendarview.utils.CalendarProperties;
 import com.applandeo.materialcalendarview.utils.DateUtils;
 import com.applandeo.materialcalendarview.utils.DayColorsUtils;
 import com.applandeo.materialcalendarview.utils.SelectedDay;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -162,15 +160,18 @@ public class DayRowClickListener implements AdapterView.OnItemClickListener {
     }
 
     private void onClick(Calendar day) {
-        if (mCalendarProperties.getEventDays() == null) {
+        if (mCalendarProperties.getEventProvider() == null) {
             createEmptyEventDay(day);
             return;
         }
 
-        Stream.of(mCalendarProperties.getEventDays())
-                .filter(eventDate -> eventDate.getCalendar().equals(day))
-                .findFirst()
-                .ifPresentOrElse(this::callOnClickListener, () -> createEmptyEventDay(day));
+        EventDay eventDay = mCalendarProperties.getEventProvider().getEventDay(day);
+
+        if (eventDay == null) {
+            createEmptyEventDay(day);
+        } else {
+            callOnClickListener(eventDay);
+        }
     }
 
     private void createEmptyEventDay(Calendar day) {

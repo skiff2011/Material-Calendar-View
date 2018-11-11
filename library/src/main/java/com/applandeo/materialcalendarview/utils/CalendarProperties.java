@@ -2,8 +2,9 @@ package com.applandeo.materialcalendarview.utils;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-
 import com.annimon.stream.Stream;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
@@ -14,7 +15,6 @@ import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.applandeo.materialcalendarview.listeners.OnSelectionAbilityListener;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -54,9 +54,11 @@ public class CalendarProperties {
     private OnCalendarPageChangeListener mOnPreviousPageChangeListener;
     private OnCalendarPageChangeListener mOnForwardPageChangeListener;
 
-    private List<EventDay> mEventDays = new ArrayList<>();
     private List<Calendar> mDisabledDays = new ArrayList<>();
     private List<SelectedDay> mSelectedDays = new ArrayList<>();
+
+    @Nullable
+    private EventProvider mEventProvider;
 
     private Context mContext;
 
@@ -228,14 +230,6 @@ public class CalendarProperties {
         mOnDayClickListener = onDayClickListener;
     }
 
-    public List<EventDay> getEventDays() {
-        return mEventDays;
-    }
-
-    public void setEventDays(List<EventDay> eventDays) {
-        mEventDays = eventDays;
-    }
-
     public List<Calendar> getDisabledDays() {
         return mDisabledDays;
     }
@@ -358,5 +352,38 @@ public class CalendarProperties {
 
     public void setHeaderVisible(boolean mHeaderVisible) {
         this.mHeaderVisible = mHeaderVisible;
+    }
+
+    @Nullable public EventProvider getEventProvider() {
+        return mEventProvider;
+    }
+
+    public void setEventProvider(
+        @Nullable EventProvider eventProvider) {
+        this.mEventProvider = eventProvider;
+    }
+
+    public interface EventProvider {
+        @Nullable EventDay getEventDay(@NonNull Calendar day);
+    }
+
+    public static class ListEventsProvider implements EventProvider {
+
+        @NonNull
+        private List<EventDay> eventDays;
+
+        public ListEventsProvider(@NonNull List<EventDay> eventDays) {
+            this.eventDays = eventDays;
+        }
+
+        @Nullable
+        @Override public EventDay getEventDay(@NonNull Calendar day) {
+            for (EventDay event : eventDays) {
+                if (event.getCalendar().equals(day)) {
+                    return event;
+                }
+            }
+            return null;
+        }
     }
 }

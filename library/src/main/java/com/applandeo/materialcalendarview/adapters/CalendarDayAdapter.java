@@ -9,16 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.annimon.stream.Stream;
 import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.R;
 import com.applandeo.materialcalendarview.utils.CalendarProperties;
 import com.applandeo.materialcalendarview.utils.DateUtils;
 import com.applandeo.materialcalendarview.utils.DayColorsUtils;
 import com.applandeo.materialcalendarview.utils.ImageUtils;
 import com.applandeo.materialcalendarview.utils.SelectedDay;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -115,22 +114,22 @@ class CalendarDayAdapter extends ArrayAdapter<Date> {
         return !mCalendarProperties.getDisabledDays().contains(day);
     }
 
-    private void loadIcon(ImageView dayIcon, Calendar day) {
-        if (mCalendarProperties.getEventDays() == null || !mCalendarProperties.getEventsEnabled()) {
+    private void loadIcon(ImageView dayIcon, Calendar calendar) {
+        if (mCalendarProperties.getEventProvider() == null
+            || !mCalendarProperties.getEventsEnabled()) {
             dayIcon.setVisibility(View.GONE);
             return;
         }
 
-        Stream.of(mCalendarProperties.getEventDays()).filter(eventDate ->
-                eventDate.getCalendar().equals(day)).findFirst().executeIfPresent(eventDay -> {
+        EventDay eventDay = mCalendarProperties.getEventProvider().getEventDay(calendar);
 
+        if (eventDay != null) {
             ImageUtils.loadImage(dayIcon, eventDay.getImageDrawable());
 
             // If a day doesn't belong to current month then image is transparent
-            if (!isCurrentMonthDay(day) || !isActiveDay(day)) {
+            if (!isCurrentMonthDay(calendar) || !isActiveDay(calendar)) {
                 dayIcon.setAlpha(0.12f);
             }
-
-        });
+        }
     }
 }

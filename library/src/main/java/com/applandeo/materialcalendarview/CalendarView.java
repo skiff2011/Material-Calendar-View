@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.annimon.stream.Stream;
 import com.applandeo.materialcalendarview.adapters.CalendarPageAdapter;
 import com.applandeo.materialcalendarview.exceptions.ErrorsMessages;
@@ -22,7 +22,6 @@ import com.applandeo.materialcalendarview.utils.AppearanceUtils;
 import com.applandeo.materialcalendarview.utils.CalendarProperties;
 import com.applandeo.materialcalendarview.utils.DateUtils;
 import com.applandeo.materialcalendarview.utils.SelectedDay;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -380,11 +379,19 @@ public class CalendarView extends LinearLayout {
      * @see EventDay
      */
     public void setEvents(List<EventDay> eventDays) {
-        if (mCalendarProperties.getEventsEnabled()) {
-            mCalendarProperties.setEventDays(eventDays);
-            mCalendarPageAdapter.notifyDataSetChanged();
-        }
+      updateEvents(new CalendarProperties.ListEventsProvider(eventDays));
     }
+
+  private void updateEvents(@Nullable CalendarProperties.EventProvider provider) {
+    if (mCalendarProperties.getEventsEnabled()) {
+      mCalendarProperties.setEventProvider(provider);
+      mCalendarPageAdapter.notifyDataSetChanged();
+    }
+  }
+
+  public void setEventsProvider(@Nullable CalendarProperties.EventProvider provider) {
+    updateEvents(provider);
+  }
 
     /**
      * @return List of Calendar object representing a selected dates
